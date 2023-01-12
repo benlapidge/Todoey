@@ -14,20 +14,18 @@ class TodoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let newItem = Item()
-        newItem.title = "Complete course"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "Play Metroid Prime 4"
-        itemArray.append(newItem2)
-        
-        
-//        if let items = data.array(forKey: "TodoListArray") as? [Item] {
-//            itemArray = items
-//        }
-        
-        
+        loadItems()
+    }
+    
+    func loadItems(){
+        if let data = try? Data(contentsOf: dataFilePath!){
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Decoder failed, \(error)")
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
